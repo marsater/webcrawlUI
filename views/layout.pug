@@ -1,0 +1,26 @@
+doctype html
+html
+    head
+        title SailTracker
+        link(rel='stylesheet' href='/styles.css')
+
+
+
+    body
+        .mainnavbar
+            div.mainmenu
+                a(href='/') Home
+                a(href='/articles/news') News
+                a(href='/articles/browse') Browse
+
+
+
+
+        != messages('message', locals)
+
+        block content
+
+        br
+        hr
+        fotter
+            p Copyright &copy; 2020

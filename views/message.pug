@@ -1,0 +1,7 @@
+// custom message template
+
+.messages
+    each type in Object.keys(messages)
+        each message in messages[type]
+
+            div(class= type) #{message}
