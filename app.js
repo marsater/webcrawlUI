@@ -4,8 +4,8 @@ const path = require('path');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
-
-
+const request = require('request');
+const cheerio = require('cheerio');
 
 var app = express();
 
@@ -54,16 +54,43 @@ app.use(expressValidator({
     }
 }));
 
+const url = "https://www.teamsportia.se/produktkategori/cykel/klassiska-cyklar/damcyklar/";
 
 // home route
 app.get('/', function(req, res){
-    req.flash('info', 'this is a message');
+    req.flash('success', 'this is a message');
 
-    res.render('index', {//pass variables
-            title:'Events',
-            events: ['sf','sdgf','dsfg'],
-            user: req.user
-        });
+
+
+    request(url, function (err, enres, body) { // Ladd in sidan
+        if(err)
+        {
+            console.log(err, "error loading page");
+        }
+        else
+        {
+            var priser = [];
+            let $ = cheerio.load(body);  // Ladda hela sidan
+
+            // För värje listelement
+            $('.site-main ul.products.columns-3 li.product').each(function(index){
+                const Name = $(this).find('h2').text();     // Hitta Namn
+                const Price = $(this).find('span.woocommerce-Price-amount').text(); //Hitta Pris
+                const Img   = $(this).find('img').attr('src');
+                console.log('Namn: ',Name,' Pris:', Price);
+
+                wop = {name:Name,price:Price,img:Img}
+                priser.push(wop);
+            });
+            //console.log(priser)
+
+            res.render('index', {//pass variables
+                    title:'Events',
+                    events:priser,
+                });
+        }
+    });
+
 });
 
 

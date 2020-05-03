@@ -3,5 +3,12 @@ extends layout
 
 block content
 
+    div.eventcontent
+        div.events
+            each event, i in events
 
-    h1 Hello
+                div.eventwrapper
+                    img.eventImg(src=event.img)
+                    h1.caption= event.name
+
+                    a.morebutton(href='/articles/eventpage'+'?name='+ event.name +'&'+'id='+event.id) #{event.price}
